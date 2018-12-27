@@ -1,4 +1,6 @@
-# Introduction
+# Double Substituition Cipher
+
+## Introduction
 
 A variant of the substituition cipher created by Muhazerin.
 
