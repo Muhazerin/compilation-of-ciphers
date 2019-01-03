@@ -5,6 +5,7 @@ This repository contains a compilation of ciphers such as traditional ciphers, l
 
 ## Traditional Cipher
 [Caesar Cipher](https://github.com/Muhazerin/compilation-of-ciphers/tree/master/cc)
+
 [Simple Substituition Cipher](https://github.com/Muhazerin/compilation-of-ciphers/tree/master/ssc)
 
 ## Variant Cipher
