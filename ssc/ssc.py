@@ -6,39 +6,43 @@ try:
 
 except OSError:
     with open("secretKey.json", 'w') as secretKeyFile:
-        #plaintext key
-        plaintextKey = "a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ,, _, -,  "
-        tempList = plaintextKey.split(", ")
-        tempKeyStr = '"' + '", "'.join(tempList) + '"'
-        
-        #cipher key
-        random.shuffle(tempList)
-        cipherKey = tempList   #create a cipher key by shuffling plaintext key
-        cipherKeyStr = '"' + '", "'.join(cipherKey) + '"'
-        key = "{\n\t\"plaintextKey\": [" + tempKeyStr+ "],\n\t\"cipherKey\": [" + cipherKeyStr + "]\n}"
-        secretKeyFile.write(key)                                             
+        # plaintext key
+        i = 33
+        plaintextKey = []
+        while i < 127:
+            if i == 34:
+                plaintextKey.append("\\\"")
+            elif i == 92:
+                plaintextKey.append("\\\\")
+            else:
+                plaintextKey.append(chr(i))
+            i += 1
+        plaintextKey.append(" ")
 
-    with open("secretKey.json", "r") as secretKeyFile:
-        keys = json.load(secretKeyFile)                                      
+        plaintextKeyStr = '"' + '", "'.join(plaintextKey) + '"'
+        # cipher key
+        random.shuffle(plaintextKey)    # create a cipher key by shuffling the plaintext key
+        cipherKeyStr = '"' + '", "'.join(plaintextKey) + '"'
+        key = "{\n\t\"plaintextKey\": [" + plaintextKeyStr + "],\n\t\"cipherKey\": [" + cipherKeyStr + "]\n}"
 
-def encode(data, key=keys):
-    print("encoding\n")
+        secretKeyFile.write(key)
+        with open("secretKey.json", "r") as secretKeyFile:
+            keys = json.load(secretKeyFile)
 
+def encode(data):
     es = ""
 
     for c in data:      #iterate each char in the string
-    i = key["plaintextKey"].index(c)
-        es = es + key["cipherKey"][i]
+        i = keys["plaintextKey"].index(c)
+        es = es + keys["cipherKey"][i]
 
     return es
 
-def decode(data, key=keys):
-    print("decoding\n")
-
+def decode(data):
     ds = ""
 
     for c in data:      #iterate each char in the string
-        i = key["cipherKey"].index(c)
-        ds = ds + key["plaintextKey"][i]
+        i = keys["cipherKey"].index(c)
+        ds = ds + keys["plaintextKey"][i]
 
     return ds
