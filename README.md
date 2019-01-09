@@ -10,6 +10,8 @@ All the python program supports python3. It was not tested on python2.
 
 [Simple Substituition Cipher](https://github.com/Muhazerin/compilation-of-ciphers/tree/master/ssc)
 
+[Vigenere Cipher](https://github.com/Muhazerin/compilation-of-ciphers/tree/master/vc)
+
 ## Variant Cipher
 [Double Substituition Cipher](https://github.com/Muhazerin/compilation-of-ciphers/tree/master/dsc)
 
