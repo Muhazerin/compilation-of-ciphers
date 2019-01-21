@@ -67,3 +67,13 @@ def decode(data):
         count += 1
 
     return ds
+
+def newKey():
+    random.shuffle(keys['cipherKey'])
+    cipherKey2 = []
+    for i in keys['cipherKey']:
+        cipherKey2.append(i)
+    cipherKey2.reverse()
+    keys['cipherKey2'] = cipherKey2
+    with open('secretKey.json','w') as secretKeyFile:
+        json.dump(keys, secretKeyFile)
