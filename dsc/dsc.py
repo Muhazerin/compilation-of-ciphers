@@ -11,11 +11,11 @@ except OSError:
     cipherKey = []
     while i < 127:
         if i == 34:
-            plaintextKey.append('\\\"')
-            cipherKey.append('\\\"')
+            plaintextKey.append('\"')
+            cipherKey.append('\"')
         elif i == 92:
-            plaintextKey.append('\\\\')
-            cipherKey.append('\\\\')
+            plaintextKey.append('\\')
+            cipherKey.append('\\')
         else:
             plaintextKey.append(chr(i))
             cipherKey.append(chr(i))
