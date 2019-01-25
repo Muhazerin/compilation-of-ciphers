@@ -31,9 +31,7 @@ except OSError:
     with open("secretKey.json", "r") as secretKeyFile:
         keys = json.load(secretKeyFile)
 
-def encode(data):
-    print("encoding\n")
-
+def encrypt(data):
     es = ""
 
     for c in data:      #iterate each char in the string
@@ -42,9 +40,7 @@ def encode(data):
 
     return es
 
-def decode(data):
-    print("decoding\n")
-
+def decrypt(data):
     ds = ""
 
     for c in data:      #iterate each char in the string
