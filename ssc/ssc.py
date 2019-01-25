@@ -25,9 +25,11 @@ except OSError:
     secretKey['plaintextKey'] = plaintextKey
     random.shuffle(cipherKey)
     secretKey['cipherKey'] = cipherKey                                       
-    with open('secretKey.json','w') as secretKeyFile:                                json.dump(secretKey, secretKeyFile)
+    with open('secretKey.json','w') as secretKeyFile:
+        json.dump(secretKey, secretKeyFile)
 
-    with open("secretKey.json", "r") as secretKeyFile:                               keys = json.load(secretKeyFile)
+    with open("secretKey.json", "r") as secretKeyFile:
+        keys = json.load(secretKeyFile)
 
 def encode(data):
     print("encoding\n")
