@@ -35,9 +35,7 @@ except OSError:
         
     with open('secretKey.json','r') as secretKeyFile:
         keys = json.load(secretKeyFile)     #initialize keys to start using the cipher
-def encode(data):
-    print("encoding\n")
-
+def encrypt(data):
     es = ""
     count = 1
 
@@ -51,9 +49,7 @@ def encode(data):
 
     return es
 
-def decode(data):
-    print("decoding\n")
-
+def decrypt(data):
     ds = ""
     count = 1
 
