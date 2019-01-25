@@ -5,31 +5,33 @@ try:
         keys = json.load(secretKeyFile)
 
 except OSError:
-    with open("secretKey.json", 'w') as secretKeyFile:
-        # plaintext key
-        i = 33
-        plaintextKey = []
-        while i < 127:
-            if i == 34:
-                plaintextKey.append("\\\"")
-            elif i == 92:
-                plaintextKey.append("\\\\")
-            else:
-                plaintextKey.append(chr(i))
-            i += 1
-        plaintextKey.append(" ")
+    # plaintext key
+    i = 32
+    secretKey = {}
+    cipherKey = []
+    plaintextKey = []
+    while i < 127:
+        if i == 34:
+            cipherKey.append("\"")
+            plaintextKey.append("\"")
+        elif i == 92:
+            cipherKey.append("\\")
+            plaintextKey.append("\\")
+        else:
+            cipherKey.append(chr(i))
+            plaintextKey.append(chr(i))
+        i += 1
 
-        plaintextKeyStr = '"' + '", "'.join(plaintextKey) + '"'
-        # cipher key
-        random.shuffle(plaintextKey)    # create a cipher key by shuffling the plaintext key
-        cipherKeyStr = '"' + '", "'.join(plaintextKey) + '"'
-        key = "{\n\t\"plaintextKey\": [" + plaintextKeyStr + "],\n\t\"cipherKey\": [" + cipherKeyStr + "]\n}"
+    secretKey['plaintextKey'] = plaintextKey
+    random.shuffle(cipherKey)
+    secretKey['cipherKey'] = cipherKey                                       
+    with open('secretKey.json','w') as secretKeyFile:                                json.dump(secretKey, secretKeyFile)
 
-        secretKeyFile.write(key)
-        with open("secretKey.json", "r") as secretKeyFile:
-            keys = json.load(secretKeyFile)
+    with open("secretKey.json", "r") as secretKeyFile:                               keys = json.load(secretKeyFile)
 
 def encode(data):
+    print("encoding\n")
+
     es = ""
 
     for c in data:      #iterate each char in the string
@@ -39,6 +41,8 @@ def encode(data):
     return es
 
 def decode(data):
+    print("decoding\n")
+
     ds = ""
 
     for c in data:      #iterate each char in the string
@@ -46,3 +50,11 @@ def decode(data):
         ds = ds + keys["plaintextKey"][i]
 
     return ds
+
+def newKey():
+    cipherKey = keys['cipherKey']
+    random.shuffle(cipherKey)
+    keys['cipherKey'] = cipherKey
+
+    with open('secretKey.json','w') as secretKeyFile:
+        json.dump(keys, secretKeyFile)
