@@ -1,6 +1,7 @@
-import json, secrets                                                         
+import json, secrets
+
 try:
-    # if file exist, load and use the key
+    # if file exist,load and use the key
     with open("secretKey.json", "r") as secretKeyFile:
         key = json.load(secretKeyFile)
 
@@ -10,34 +11,34 @@ except OSError:
     # then, load the key from the file
     nkey = 0
     while nkey <= 0:
-        nkey = secrets.randbelow(25)
+        nkey = secrets.randbelow(94)
 
-    i = 33
-    plainTextList = []
+    i = 32
+    plaintextKey = []
+    cipherKey = []
     while i < 127:
         if i == 34:
-            plainTextList.append("\\\"")
+            cipherKey.append('\"')
+            plaintextKey.append("\"")
         elif i == 92:
-            plainTextList.append("\\\\")
+            cipherKey.append('\\')
+            plaintextKey.append("\\")
         else:
-            plainTextList.append(chr(i))
-        i += 1
-    plainTextList.append(" ")
-    
-    cipherTextList = []
-    for c in plainTextList:
-        cipherTextList.append(c)
-    
-    i = 0
-    while i < nkey:
-        cipherTextList.append(cipherTextList.pop(0))
+            cipherKey.append(chr(i))
+            plaintextKey.append(chr(i))
         i += 1
 
-    plainTextStr = '"' + '", "'.join(plainTextList) + '"'
-    cipherTextStr = '"' + '", "'.join(cipherTextList) + '"'
-    jsonKey = '{\n\t"key": "' + str(nkey) + '",\n\t"plainTextList": ['+plainTextStr+'],\n\t"cipherTextList": ['+cipherTextStr+']\n}'                      
+    i = 0
+    while i < nkey:
+        cipherKey.append(cipherKey.pop(0))
+        i += 1
+
+    secretKey = {}
+    secretKey['plaintextKey'] = plaintextKey
+    secretKey['cipherKey'] = cipherKey
+
     with open("secretKey.json", "w") as secretKeyFile:
-        secretKeyFile.write(jsonKey)
+        json.dump(secretKey, secretKeyFile)
 
     with open("secretKey.json", "r") as secretKeyFile:
         key = json.load(secretKeyFile)
@@ -47,7 +48,7 @@ except OSError:
 def encrypt(plaintext):
     es = ""
     for c in plaintext:
-        es += key["cipherTextList"][key["plainTextList"].index(c)]
+        es += key["cipherKey"][key["plaintextKey"].index(c)]
 
     return es
 
@@ -56,6 +57,23 @@ def encrypt(plaintext):
 def decrypt(ciphertext):
     ds = ""
     for c in ciphertext:
-        ds += key["plainTextList"][key["cipherTextList"].index(c)]
-
+        ds += key["plaintextKey"][key["cipherKey"].index(c)]                 
     return ds
+
+def newKey():
+    cipherKey = []
+    for c in key['plaintextKey']:
+        cipherKey.append(c)
+    nKey = 0
+    while nKey == 0:
+        nKey = secrets.randbelow(94)
+
+    i = 0
+    while i < nKey:
+        cipherKey.append(cipherKey.pop(0))
+        i += 1
+
+    key['cipherKey'] = cipherKey
+
+    with open('secretKey.json','w') as secretKeyFile:
+        json.dump(key, secretKeyFile)
